@@ -1,2 +1,2 @@
-# IT-HELPDESK-ASSISTANT
-Repo ini berisi project dari IT Helpdesk Assistant untuk pengerjaan project Internal kantor
+# BE-SPARTA-ASSISTANT
+Repo ini merupakan repo khusus untuk BE dari Sparta Project - IT Helpdesk Assistant
