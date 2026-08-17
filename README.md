@@ -2,6 +2,10 @@
 
 Laravel 13 REST API for the employee and admin React applications.
 
+> **Current state (2026-08-17):** MVP implemented on branch `feature/backend-api-mvp`,
+> 34 tests passing. See `docs/STATUS.md` for the handoff notes, commit map, and the
+> list of known issues to bugfix next.
+
 ## Requirements
 
 - PHP 8.3+
