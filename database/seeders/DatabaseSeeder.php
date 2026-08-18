@@ -22,15 +22,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
         ]);
 
-        $technician = User::factory()->role(Role::Technician)->create([
-            'name' => 'Demo Technician',
-            'email' => 'technician@example.com',
-            'employee_id' => 'TECH-0001',
-            'division' => 'IT',
-            'password' => Hash::make('password'),
-        ]);
-
-        User::factory()->role(Role::Admin)->create([
+        $admin = User::factory()->role(Role::Admin)->create([
             'name' => 'Demo Admin',
             'email' => 'admin@example.com',
             'employee_id' => 'ADMIN-0001',
@@ -39,14 +31,14 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $article = KnowledgeBaseArticle::factory()->create([
-            'updated_by' => $technician->id,
+            'updated_by' => $admin->id,
         ]);
 
         KnowledgeBaseArticle::factory()->draft()->create([
             'title' => 'Unpublished printer troubleshooting draft',
             'category' => Category::Printer,
             'status' => ArticleStatus::Draft,
-            'updated_by' => $technician->id,
+            'updated_by' => $admin->id,
         ]);
 
         $employee->tickets()->create([
@@ -59,7 +51,7 @@ class DatabaseSeeder extends Seeder
             'priority' => 'Medium',
             'status' => 'Open',
             'kb_article_id' => $article->id,
-            'troubleshooting_history' => $article->solution_steps,
+            'troubleshooting_history' => ['Check Wi-Fi connection.', 'Disconnect and reconnect.'],
         ]);
     }
 }

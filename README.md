@@ -34,7 +34,6 @@ Seeded local accounts all use `password`:
 
 ```text
 employee@example.com / password
-technician@example.com / password
 admin@example.com / password
 ```
 
