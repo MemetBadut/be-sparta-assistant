@@ -49,35 +49,5 @@ Route::middleware('auth:sanctum')->group(function (): void {
     });
 });
 
-Route::model('ticket', \App\Models\Ticket::class);
-Route::model('troubleshooting', \App\Models\TroubleshootingResult::class);
-Route::model('article', \App\Models\KnowledgeBaseArticle::class);
 Route::bind('ticket', fn (string $value) => \App\Models\Ticket::where('ticket_number', $value)->firstOrFail());
 Route::bind('ticketNumber', fn (string $value) => $value);
-
-Route::get('categories', CategoryController::class);
-
-Route::middleware('auth:sanctum')->group(function (): void {
-    Route::get('profile', ProfileController::class);
-    Route::post('troubleshooting', [TroubleshootingController::class, 'store']);
-    Route::post('troubleshooting/{troubleshooting}/feedback', [TroubleshootingController::class, 'feedback']);
-    Route::get('tickets', [TicketController::class, 'index']);
-    Route::post('tickets', [TicketController::class, 'store']);
-    Route::get('tickets/{ticketNumber}', [TicketController::class, 'show']);
-    Route::post('tickets/{ticketNumber}/attachments', [AttachmentController::class, 'store']);
-
-    Route::prefix('admin')->middleware('can.manage')->group(function (): void {
-        Route::get('tickets', [AdminTicketController::class, 'index']);
-        Route::get('tickets/{ticket}', [AdminTicketController::class, 'show']);
-        Route::patch('tickets/{ticket}', [AdminTicketController::class, 'update']);
-        Route::get('tickets/{ticket}/activities', [AdminTicketController::class, 'activities']);
-        Route::get('articles', [KnowledgeBaseArticleController::class, 'index']);
-        Route::post('articles', [KnowledgeBaseArticleController::class, 'store']);
-        Route::get('articles/{article}', [KnowledgeBaseArticleController::class, 'show']);
-        Route::patch('articles/{article}', [KnowledgeBaseArticleController::class, 'update']);
-        Route::delete('articles/{article}', [KnowledgeBaseArticleController::class, 'destroy']);
-    });
-});
-
-Route::model('ticket', \App\Models\Ticket::class);
-Route::model('troubleshooting', \App\Models\TroubleshootingResult::class);

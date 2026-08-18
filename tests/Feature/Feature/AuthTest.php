@@ -38,20 +38,19 @@ class AuthTest extends TestCase
         ])->assertUnprocessable()->assertJsonValidationErrors(['email', 'employee_id']);
     }
 
-    public function test_user_can_login_with_email_or_employee_id(): void
+    public function test_user_can_login_with_email(): void
     {
-        $user = User::factory()->create(['email' => 'login@example.com', 'employee_id' => 'EMP-7000', 'password' => 'password123']);
+        $user = User::factory()->create(['email' => 'login@example.com', 'password' => 'password123']);
 
-        $this->postJson('/api/auth/login', ['login' => $user->email, 'password' => 'password123'])->assertOk();
+        $this->postJson('/api/auth/login', ['email' => $user->email, 'password' => 'password123'])->assertOk();
         $this->assertAuthenticated();
-        $this->postJson('/api/auth/login', ['login' => $user->employee_id, 'password' => 'password123'])->assertOk();
     }
 
     public function test_failed_login_is_rejected(): void
     {
         User::factory()->create(['email' => 'login@example.com', 'password' => 'password123']);
 
-        $this->postJson('/api/auth/login', ['login' => 'login@example.com', 'password' => 'wrong'])->assertUnprocessable();
+        $this->postJson('/api/auth/login', ['email' => 'login@example.com', 'password' => 'wrong'])->assertUnprocessable();
     }
 
     public function test_profile_requires_authentication_and_returns_safe_fields(): void
@@ -60,12 +59,22 @@ class AuthTest extends TestCase
 
         $user = User::factory()->create();
         $this->actingAs($user)->getJson('/api/profile')->assertOk()
-            ->assertJsonPath('employee_id', $user->employee_id)
+            ->assertJsonPath('data.employee_id', $user->employee_id)
             ->assertJsonMissing(['password']);
     }
 
-    public function test_categories_are_fixed(): void
+    public function test_api_profile_returns_json_401_without_json_accept_header(): void
     {
-        $this->getJson('/api/categories')->assertOk()->assertJsonCount(5, 'data');
+        $this->get('/api/profile')->assertUnauthorized()->assertJson(['message' => 'Unauthenticated.']);
+    }
+
+    public function test_categories_return_stable_ids_and_labels(): void
+    {
+        $this->getJson('/api/categories')->assertOk()
+            ->assertJsonCount(5, 'data')
+            ->assertJsonPath('data.0.id', 'wifi_network')
+            ->assertJsonPath('data.0.label', 'Wi-Fi / Network')
+            ->assertJsonPath('data.2.id', 'laptop_pc')
+            ->assertJsonPath('data.2.label', 'Laptop / PC');
     }
 }

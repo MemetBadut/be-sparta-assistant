@@ -13,7 +13,7 @@ class UpdateTicketRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'assigned_technician_id' => ['sometimes', 'nullable', 'integer', 'exists:users,id'],
+            'assigned_technician' => ['sometimes', 'nullable', 'string', 'max:255'],
             'status' => ['sometimes', 'string', Rule::in(array_map(static fn (TicketStatus $s): string => $s->value, TicketStatus::cases()))],
             'resolution_notes' => ['sometimes', 'nullable', 'string', 'max:10000'],
         ];

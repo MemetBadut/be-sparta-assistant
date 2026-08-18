@@ -10,6 +10,6 @@ class ProfileController extends Controller
 {
     public function __invoke(Request $request): JsonResponse
     {
-        return response()->json(new UserResource($request->user()));
+        return response()->json(['data' => (new UserResource($request->user()))->resolve($request)]);
     }
 }

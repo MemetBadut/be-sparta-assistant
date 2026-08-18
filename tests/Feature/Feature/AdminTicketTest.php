@@ -18,7 +18,7 @@ class AdminTicketTest extends TestCase
         $user = User::factory()->create();
         return $user->tickets()->create([
             'ticket_number' => 'IT-2026-30001', 'name' => $user->name, 'division' => $user->division,
-            'issue_title' => 'Network', 'description' => 'No internet', 'category' => 'Wi-Fi / Network',
+            'issue_title' => 'Network', 'description' => 'No internet', 'category' => 'wifi_network',
             'priority' => 'High', 'status' => 'Open',
         ]);
     }

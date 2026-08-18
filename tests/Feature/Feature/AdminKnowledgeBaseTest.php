@@ -21,9 +21,8 @@ class AdminKnowledgeBaseTest extends TestCase
     private function data(): array
     {
         return [
-            'title' => 'Printer queue stuck', 'category' => 'Printer', 'symptoms' => 'Jobs remain queued.',
+            'title' => 'Printer queue stuck', 'category' => 'printer', 'symptoms' => 'Jobs remain queued.',
             'keywords' => 'printer, queue', 'problem_description' => 'The queue does not clear.',
-            'solution_steps' => ['Open the printer queue.', 'Cancel the stuck job.'],
             'expected_result' => 'The queue prints normally.', 'status' => 'Published',
         ];
     }
@@ -42,7 +41,7 @@ class AdminKnowledgeBaseTest extends TestCase
         $response->assertCreated()->assertJsonPath('data.status', 'Published');
         $id = $response->json('data.id');
 
-        $this->actingAs($technician)->getJson('/api/admin/articles?category=Printer&status=Published')
+        $this->actingAs($technician)->getJson('/api/admin/articles?category=printer&status=Published')
             ->assertOk()->assertJsonCount(1, 'data');
         $this->actingAs($technician)->patchJson('/api/admin/articles/'.$id, ['status' => 'Draft'])
             ->assertOk()->assertJsonPath('data.status', 'Draft');

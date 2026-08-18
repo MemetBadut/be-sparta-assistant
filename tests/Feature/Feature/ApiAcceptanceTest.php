@@ -28,11 +28,11 @@ class ApiAcceptanceTest extends TestCase
         $register->assertCreated();
 
         // Profile.
-        $this->getJson('/api/profile')->assertOk()->assertJsonPath('employee_id', 'EMP-8001');
+        $this->getJson('/api/profile')->assertOk()->assertJsonPath('data.employee_id', 'EMP-8001');
 
         // Troubleshooting from a published article.
         $result = $this->postJson('/api/troubleshooting', [
-            'category' => 'Wi-Fi / Network', 'description' => 'Wi-Fi is connected but there is no internet',
+            'category' => 'wifi_network', 'description' => 'Wi-Fi is connected but there is no internet',
         ]);
         $result->assertCreated()->assertJsonPath('data.source', 'verified_knowledge_base');
         $resultId = $result->json('data.id');
@@ -45,7 +45,7 @@ class ApiAcceptanceTest extends TestCase
             'name' => 'Acceptance Employee', 'division' => 'Operations',
             'issue_title' => 'Wi-Fi connected but no internet',
             'description' => 'The laptop associates but cannot browse.',
-            'category' => 'Wi-Fi / Network', 'priority' => 'Medium',
+            'category' => 'wifi_network', 'priority' => 'Medium',
             'troubleshooting_result_id' => $resultId,
         ]);
         $ticket->assertCreated();
@@ -67,7 +67,7 @@ class ApiAcceptanceTest extends TestCase
 
         // Draft articles never surface.
         $draftResult = $this->postJson('/api/troubleshooting', [
-            'category' => 'Printer', 'description' => 'Printer prints blank pages only',
+            'category' => 'printer', 'description' => 'Printer prints blank pages only',
         ]);
         $draftResult->assertCreated()->assertJsonMissing(['source' => 'verified_knowledge_base']);
     }

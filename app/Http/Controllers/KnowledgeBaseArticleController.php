@@ -24,7 +24,7 @@ class KnowledgeBaseArticleController extends Controller
             }
         }
 
-        return KnowledgeBaseArticleResource::collection($query->latest('updated_at')->paginate(20));
+        return KnowledgeBaseArticleResource::collection($query->latest('updated_at')->paginate(config('pagination.per_page')));
     }
 
     public function store(CreateArticleRequest $request): KnowledgeBaseArticleResource

@@ -16,7 +16,7 @@ class AdminTicketController extends Controller
 {
     public function index(Request $request): AnonymousResourceCollection
     {
-        $query = Ticket::query()->with(['user', 'technician']);
+        $query = Ticket::query()->with('user');
         $search = $request->string('search')->toString();
         if ($search !== '') {
             $query->where(function ($query) use ($search): void {
@@ -31,14 +31,14 @@ class AdminTicketController extends Controller
             }
         }
 
-        return TicketResource::collection($query->latest('id')->paginate(20));
+        return TicketResource::collection($query->latest('id')->paginate(config('pagination.per_page')));
     }
 
     public function show(Ticket $ticket): TicketResource
     {
         Gate::authorize('view', $ticket);
 
-        return new TicketResource($ticket->load(['user', 'technician', 'attachments']));
+        return new TicketResource($ticket->load(['user', 'attachments']));
     }
 
     public function update(UpdateTicketRequest $request, Ticket $ticket, TicketActivityService $activities): TicketResource
@@ -56,6 +56,6 @@ class AdminTicketController extends Controller
     {
         Gate::authorize('viewActivities', $ticket);
 
-        return TicketActivityResource::collection($ticket->activities()->paginate(30));
+        return TicketActivityResource::collection($ticket->activities()->paginate(config('pagination.per_page')));
     }
 }

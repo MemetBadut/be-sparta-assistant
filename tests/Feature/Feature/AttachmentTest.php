@@ -21,7 +21,7 @@ class AttachmentTest extends TestCase
         $user = User::factory()->create();
         $ticket = $user->tickets()->create([
             'ticket_number' => 'IT-2026-10001', 'name' => $user->name, 'division' => $user->division,
-            'issue_title' => 'Screenshot', 'description' => 'See screenshot.', 'category' => 'Windows',
+            'issue_title' => 'Screenshot', 'description' => 'See screenshot.', 'category' => 'windows',
             'priority' => 'Low', 'status' => 'Open',
         ]);
 
@@ -39,7 +39,7 @@ class AttachmentTest extends TestCase
         $user = User::factory()->create();
         $ticket = $user->tickets()->create([
             'ticket_number' => 'IT-2026-10001', 'name' => $user->name, 'division' => $user->division,
-            'issue_title' => 'Bad file', 'description' => 'Bad file.', 'category' => 'Windows',
+            'issue_title' => 'Bad file', 'description' => 'Bad file.', 'category' => 'windows',
             'priority' => 'Low', 'status' => 'Open',
         ]);
 

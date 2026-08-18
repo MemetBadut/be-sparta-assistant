@@ -16,10 +16,10 @@ class KnowledgeBaseArticleResource extends JsonResource
             'symptoms' => $this->symptoms,
             'keywords' => $this->keywords,
             'problem_description' => $this->problem_description,
-            'solution_steps' => $this->solution_steps,
             'expected_result' => $this->expected_result,
             'status' => $this->status->value,
             'updated_by' => $this->updated_by,
+            'created_at' => $this->created_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String(),
         ];
     }

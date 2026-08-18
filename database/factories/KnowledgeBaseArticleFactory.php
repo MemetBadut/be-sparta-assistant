@@ -18,13 +18,6 @@ class KnowledgeBaseArticleFactory extends Factory
             'symptoms' => 'Wi-Fi shows connected but websites cannot be accessed.',
             'keywords' => 'wifi, internet, connected, no internet, network',
             'problem_description' => 'The device associates with the company Wi-Fi but has no working internet access.',
-            'solution_steps' => [
-                'Check Wi-Fi connection.',
-                'Disconnect and reconnect.',
-                'Restart network connection.',
-                'Run Windows Network Troubleshooter.',
-                'Restart device.',
-            ],
             'expected_result' => 'Internet access is restored.',
             'status' => ArticleStatus::Published,
         ];

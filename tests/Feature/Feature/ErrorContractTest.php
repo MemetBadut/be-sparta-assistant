@@ -15,7 +15,7 @@ class ErrorContractTest extends TestCase
     public function validation_errors_have_json_shape(): void
     {
         $this->actingAs(User::factory()->create())
-            ->postJson('/api/troubleshooting', ['category' => 'Wi-Fi / Network'])
+            ->postJson('/api/troubleshooting', ['category' => 'wifi_network'])
             ->assertUnprocessable()
             ->assertJsonStructure(['message', 'errors' => ['description']]);
     }

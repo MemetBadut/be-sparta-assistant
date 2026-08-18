@@ -15,7 +15,6 @@ return new class extends Migration
             $table->text('symptoms');
             $table->text('keywords')->nullable();
             $table->text('problem_description');
-            $table->json('solution_steps');
             $table->text('expected_result');
             $table->string('status')->default('Draft')->index();
             $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
@@ -48,7 +47,8 @@ return new class extends Migration
             $table->string('device_code')->nullable();
             $table->string('priority')->default('Medium');
             $table->string('status')->default('Open')->index();
-            $table->foreignId('assigned_technician_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->string('assigned_technician')->nullable();
+            $table->boolean('repair_required')->nullable();
             $table->foreignId('kb_article_id')->nullable()->constrained('knowledge_base_articles')->nullOnDelete();
             $table->foreignId('troubleshooting_result_id')->nullable()->constrained('troubleshooting_results')->nullOnDelete();
             $table->json('troubleshooting_history')->nullable();

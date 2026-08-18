@@ -11,7 +11,7 @@ final class KnowledgeBaseArticleSeed
         KnowledgeBaseArticle::factory()->create();
         KnowledgeBaseArticle::factory()->draft()->create([
             'title' => 'Unpublished printer draft',
-            'category' => 'Printer',
+            'category' => 'printer',
         ]);
     }
 }

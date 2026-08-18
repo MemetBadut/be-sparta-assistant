@@ -15,14 +15,13 @@ class KnowledgeBaseArticle extends Model
 
     protected $fillable = [
         'title', 'category', 'symptoms', 'keywords', 'problem_description',
-        'solution_steps', 'expected_result', 'status', 'updated_by',
+        'expected_result', 'status', 'updated_by',
     ];
 
     protected function casts(): array
     {
         return [
             'category' => Category::class,
-            'solution_steps' => 'array',
             'status' => ArticleStatus::class,
         ];
     }

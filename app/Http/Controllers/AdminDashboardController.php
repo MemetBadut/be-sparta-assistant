@@ -29,7 +29,7 @@ class AdminDashboardController extends Controller
         return new AdminDashboardResource([
             'summary' => $summary,
             'tickets_by_category' => $ticketsByCategory,
-            'recent_tickets' => Ticket::with('technician')->latest('id')->limit(10)->get(),
+            'recent_tickets' => Ticket::latest('id')->limit(10)->get(),
             'recent_articles' => KnowledgeBaseArticle::latest('updated_at')->limit(10)->get(),
         ]);
     }

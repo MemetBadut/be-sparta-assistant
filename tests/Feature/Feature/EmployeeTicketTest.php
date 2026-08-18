@@ -20,11 +20,11 @@ class EmployeeTicketTest extends TestCase
         $article = KnowledgeBaseArticle::factory()->create();
         $result = TroubleshootingResult::create([
             'user_id' => $user->id,
-            'category' => 'Wi-Fi / Network',
+            'category' => 'wifi_network',
             'description' => 'wifi no internet',
             'source' => 'verified_knowledge_base',
             'selected_article_id' => $article->id,
-            'result_payload' => ['article' => ['steps' => $article->solution_steps]],
+            'result_payload' => ['article' => ['steps' => ['Reconnect to Wi-Fi.']]],
         ]);
 
         $response = $this->actingAs($user)->postJson('/api/tickets', [
@@ -32,7 +32,7 @@ class EmployeeTicketTest extends TestCase
             'division' => $user->division,
             'issue_title' => 'Wi-Fi connected but no internet',
             'description' => 'The laptop has no internet.',
-            'category' => 'Wi-Fi / Network',
+            'category' => 'wifi_network',
             'priority' => 'Medium',
             'troubleshooting_result_id' => $result->id,
         ]);
@@ -52,7 +52,7 @@ class EmployeeTicketTest extends TestCase
 
         $this->actingAs($user)->postJson('/api/tickets', [
             'name' => $user->name, 'division' => $user->division, 'issue_title' => 'Broken laptop',
-            'description' => 'Laptop will not start.', 'category' => 'Laptop / PC', 'priority' => 'High',
+            'description' => 'Laptop will not start.', 'category' => 'laptop_pc', 'priority' => 'High',
         ])->assertUnprocessable()->assertJsonValidationErrors(['device_code']);
     }
 
@@ -63,11 +63,11 @@ class EmployeeTicketTest extends TestCase
         $other = User::factory()->create();
         $own = $user->tickets()->create([
             'ticket_number' => 'IT-2026-10001', 'name' => $user->name, 'division' => $user->division,
-            'issue_title' => 'Own', 'description' => 'Own', 'category' => 'Windows', 'priority' => 'Low', 'status' => 'Open',
+            'issue_title' => 'Own', 'description' => 'Own', 'category' => 'windows', 'priority' => 'Low', 'status' => 'Open',
         ]);
         $foreign = $other->tickets()->create([
             'ticket_number' => 'IT-2026-10002', 'name' => $other->name, 'division' => $other->division,
-            'issue_title' => 'Foreign', 'description' => 'Foreign', 'category' => 'Windows', 'priority' => 'Low', 'status' => 'Open',
+            'issue_title' => 'Foreign', 'description' => 'Foreign', 'category' => 'windows', 'priority' => 'Low', 'status' => 'Open',
         ]);
 
         $this->actingAs($user)->getJson('/api/tickets')->assertOk()->assertJsonCount(1, 'data');

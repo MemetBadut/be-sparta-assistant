@@ -19,8 +19,6 @@ class CreateArticleRequest extends FormRequest
             'symptoms' => ['required', 'string', 'max:10000'],
             'keywords' => ['nullable', 'string', 'max:10000'],
             'problem_description' => ['required', 'string', 'max:10000'],
-            'solution_steps' => ['required', 'array', 'min:1'],
-            'solution_steps.*' => ['required', 'string', 'max:2000'],
             'expected_result' => ['required', 'string', 'max:10000'],
             'status' => ['required', 'string', Rule::in(array_map(static fn (ArticleStatus $s): string => $s->value, ArticleStatus::cases()))],
         ];

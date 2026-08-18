@@ -4,11 +4,22 @@ namespace App\Enums;
 
 enum Category: string
 {
-    case Network = 'Wi-Fi / Network';
-    case Windows = 'Windows';
-    case Computer = 'Laptop / PC';
-    case Printer = 'Printer';
-    case Software = 'Basic Software Issues';
+    case Network = 'wifi_network';
+    case Windows = 'windows';
+    case Computer = 'laptop_pc';
+    case Printer = 'printer';
+    case Software = 'basic_software_issues';
+
+    public function label(): string
+    {
+        return match ($this) {
+            self::Network => 'Wi-Fi / Network',
+            self::Windows => 'Windows',
+            self::Computer => 'Laptop / PC',
+            self::Printer => 'Printer',
+            self::Software => 'Basic Software Issues',
+        };
+    }
 
     /** @return list<string> */
     public static function values(): array

@@ -23,7 +23,7 @@ class KeywordKnowledgeBaseRetrieverTest extends TestCase
 
         $retriever = new KeywordKnowledgeBaseRetriever();
 
-        $results = $retriever->retrieve('Wi-Fi / Network', 'wifi connected but no internet');
+        $results = $retriever->retrieve('wifi_network', 'wifi connected but no internet');
 
         $this->assertCount(1, $results);
     }
@@ -37,7 +37,7 @@ class KeywordKnowledgeBaseRetrieverTest extends TestCase
 
         $retriever = new KeywordKnowledgeBaseRetriever();
 
-        $this->assertSame([], $retriever->retrieve('Wi-Fi / Network', 'wifi no internet'));
+        $this->assertSame([], $retriever->retrieve('wifi_network', 'wifi no internet'));
     }
 
     #[Test]
@@ -45,12 +45,12 @@ class KeywordKnowledgeBaseRetrieverTest extends TestCase
     {
         KnowledgeBaseArticle::factory()->create([
             'title' => 'Wi-Fi printer offline',
-            'category' => 'Printer',
+            'category' => 'printer',
         ]);
 
         $retriever = new KeywordKnowledgeBaseRetriever();
 
-        $this->assertSame([], $retriever->retrieve('Wi-Fi / Network', 'wifi printer offline'));
+        $this->assertSame([], $retriever->retrieve('wifi_network', 'wifi printer offline'));
     }
 
     #[Test]
@@ -62,7 +62,7 @@ class KeywordKnowledgeBaseRetrieverTest extends TestCase
 
         $retriever = new KeywordKnowledgeBaseRetriever();
 
-        $this->assertSame([], $retriever->retrieve('Wi-Fi / Network', 'cactus blooming in the desert'));
+        $this->assertSame([], $retriever->retrieve('wifi_network', 'cactus blooming in the desert'));
     }
 
     #[Test]
@@ -75,7 +75,7 @@ class KeywordKnowledgeBaseRetrieverTest extends TestCase
 
         $retriever = new KeywordKnowledgeBaseRetriever();
 
-        $results = $retriever->retrieve('Wi-Fi / Network', 'wifi connected but no internet', 3);
+        $results = $retriever->retrieve('wifi_network', 'wifi connected but no internet', 3);
 
         $this->assertSame($relevant->id, $results[0]->id);
         $this->assertLessThanOrEqual(3, count($results));

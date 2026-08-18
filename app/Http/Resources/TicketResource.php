@@ -19,7 +19,8 @@ class TicketResource extends JsonResource
             'device_code' => $this->device_code,
             'priority' => $this->priority->value,
             'status' => $this->status->value,
-            'assigned_technician' => $this->whenLoaded('technician', fn () => $this->technician?->name),
+            'assigned_technician' => $this->assigned_technician,
+            'repair_required' => $this->repair_required,
             'troubleshooting_history' => $this->troubleshooting_history,
             'resolution_notes' => $this->when(
                 $request->user()?->canManage() || in_array($this->status->value, ['Resolved', 'Closed'], true),

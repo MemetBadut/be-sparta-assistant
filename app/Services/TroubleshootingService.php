@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Enums\ArticleStatus;
 use App\Models\KnowledgeBaseArticle;
 use App\Models\TroubleshootingResult;
 use App\Models\User;
@@ -23,19 +22,32 @@ class TroubleshootingService
         $payload = [
             'category' => $category,
             'issue_summary' => $description,
-            'source' => $article ? 'verified_knowledge_base' : 'general_guidance',
-            'article' => $article ? [
-                'id' => $article->id,
-                'title' => $article->title,
-                'steps' => $article->solution_steps,
-                'expected_result' => $article->expected_result,
-            ] : null,
+            'source' => $article ? 'verified_knowledge_base' : 'no_guidance',
+            'article' => null,
             'general_guidance' => null,
             'recommend_ticket' => ! $article,
         ];
 
-        if (! $article) {
+        if ($article) {
+            $guidance = $this->ai->generate($category, $description, [
+                'title' => $article->title,
+                'symptoms' => $article->symptoms,
+                'keywords' => $article->keywords,
+                'problem_description' => $article->problem_description,
+                'expected_result' => $article->expected_result,
+            ]);
+            $steps = $guidance['steps'] ?? [];
+            $payload['article'] = [
+                'id' => $article->id,
+                'title' => $article->title,
+                'steps' => $steps !== [] ? $steps : ["Follow the verified solution for \"{$article->title}\". Expected result: {$article->expected_result}"],
+                'expected_result' => $article->expected_result,
+            ];
+            // A published article matched, so this is a verified result regardless of AI availability.
+            $payload['recommend_ticket'] = false;
+        } else {
             $guidance = $this->ai->generate($category, $description);
+            $payload['source'] = $guidance['guidance'] === null ? 'no_guidance' : 'general_guidance';
             $payload['general_guidance'] = $guidance['guidance'];
             $payload['recommend_ticket'] = $guidance['recommend_ticket'];
         }

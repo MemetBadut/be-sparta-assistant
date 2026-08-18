@@ -26,8 +26,8 @@ class TicketActivityService
                 }
             }
 
-            if (array_key_exists('assigned_technician_id', $changes) && $ticket->assigned_technician_id !== $changes['assigned_technician_id']) {
-                $activities[] = ['type' => 'assigned', 'note' => 'Technician assignment changed.'];
+            if (array_key_exists('assigned_technician', $changes) && $ticket->assigned_technician !== $changes['assigned_technician']) {
+                $activities[] = ['type' => 'assigned', 'note' => $changes['assigned_technician'] === null ? 'Assignment cleared.' : 'Assigned to '.$changes['assigned_technician'].'.'];
             }
 
             if (array_key_exists('resolution_notes', $changes) && $ticket->resolution_notes !== $changes['resolution_notes']) {
@@ -39,7 +39,7 @@ class TicketActivityService
                 $ticket->activities()->create([...$activity, 'user_id' => $actor->id]);
             }
 
-            return $ticket->fresh(['technician', 'attachments']);
+            return $ticket->fresh('attachments');
         });
     }
 }

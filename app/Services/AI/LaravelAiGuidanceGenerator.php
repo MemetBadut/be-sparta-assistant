@@ -23,6 +23,7 @@ class LaravelAiGuidanceGenerator implements AiGuidanceGenerator
 
             return $text === '' ? $this->fallback() : [
                 'guidance' => $text,
+                'steps' => [],
                 'recommend_ticket' => true,
             ];
         } catch (Throwable $exception) {
@@ -39,11 +40,12 @@ class LaravelAiGuidanceGenerator implements AiGuidanceGenerator
         return "Category: {$category}\nIssue: {$description}\nVerified context (reference only): {$contextJson}\n\nGive cautious, generic troubleshooting guidance. Do not claim company policy, do not invent internal procedures, and recommend creating an IT ticket. Return plain text only.";
     }
 
-    /** @return array{guidance:string,recommend_ticket:bool} */
+    /** @return array{guidance:?string,steps:list<string>,recommend_ticket:bool} */
     private function fallback(): array
     {
         return [
             'guidance' => 'No verified troubleshooting article matched this issue. Please create an IT ticket so support can investigate it.',
+            'steps' => [],
             'recommend_ticket' => true,
         ];
     }

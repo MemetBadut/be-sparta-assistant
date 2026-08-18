@@ -19,7 +19,7 @@ class TroubleshootingTest extends TestCase
         $article = KnowledgeBaseArticle::factory()->create();
 
         $response = $this->actingAs($user)->postJson('/api/troubleshooting', [
-            'category' => 'Wi-Fi / Network',
+            'category' => 'wifi_network',
             'description' => 'Wi-Fi is connected but there is no internet',
         ]);
 
@@ -40,7 +40,7 @@ class TroubleshootingTest extends TestCase
         $user = User::factory()->create();
 
         $response = $this->actingAs($user)->postJson('/api/troubleshooting', [
-            'category' => 'Basic Software Issues',
+            'category' => 'basic_software_issues',
             'description' => 'Cactus growing software will not bloom at all',
         ]);
 
@@ -56,7 +56,7 @@ class TroubleshootingTest extends TestCase
         $user = User::factory()->create();
 
         $response = $this->actingAs($user)->postJson('/api/troubleshooting', [
-            'category' => 'Basic Software Issues',
+            'category' => 'basic_software_issues',
             'description' => 'Cactus growing software will not bloom at all',
         ]);
 
@@ -70,7 +70,7 @@ class TroubleshootingTest extends TestCase
         $other = User::factory()->create();
 
         $result = $this->actingAs($user)->postJson('/api/troubleshooting', [
-            'category' => 'Basic Software Issues',
+            'category' => 'basic_software_issues',
             'description' => 'Cactus growing software will not bloom at all',
         ]);
 
@@ -88,11 +88,11 @@ class TroubleshootingTest extends TestCase
     #[Test]
     public function requires_authentication_and_valid_category(): void
     {
-        $this->postJson('/api/troubleshooting', ['category' => 'Wi-Fi / Network', 'description' => 'no internet'])
+        $this->postJson('/api/troubleshooting', ['category' => 'wifi_network', 'description' => 'no internet'])
             ->assertUnauthorized();
 
         $this->actingAs(User::factory()->create())
-            ->postJson('/api/troubleshooting', ['category' => 'Invalid', 'description' => 'no internet'])
+            ->postJson('/api/troubleshooting', ['category' => 'invalid', 'description' => 'no internet'])
             ->assertUnprocessable();
     }
 }

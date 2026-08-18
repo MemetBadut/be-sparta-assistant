@@ -14,7 +14,7 @@ class TicketController extends Controller
     public function index(Request $request): AnonymousResourceCollection
     {
         return TicketResource::collection(
-            $request->user()->tickets()->latest('id')->with('attachments')->paginate(15),
+            $request->user()->tickets()->latest('id')->with('attachments')->paginate(config('pagination.per_page')),
         );
     }
 
