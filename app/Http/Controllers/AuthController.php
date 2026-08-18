@@ -33,7 +33,7 @@ class AuthController extends Controller
         $user = User::where('email', $request->string('email')->toString())->first();
 
         if (! $user || ! Hash::check($request->string('password')->toString(), $user->password)) {
-            abort(422, 'The provided credentials are incorrect.');
+            abort(response()->json(['message' => 'The provided credentials are incorrect.', 'error_code' => 'INVALID_CREDENTIALS'], 422));
         }
 
         Auth::login($user);

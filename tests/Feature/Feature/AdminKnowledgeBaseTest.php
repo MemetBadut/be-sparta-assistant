@@ -34,19 +34,21 @@ class AdminKnowledgeBaseTest extends TestCase
     }
 
     #[Test]
-    public function technician_can_create_filter_update_and_confirm_delete(): void
+    public function admin_can_create_filter_update_and_confirm_delete(): void
     {
-        $technician = User::factory()->role(Role::Technician)->create();
-        $response = $this->actingAs($technician)->postJson('/api/admin/articles', $this->data());
+        $admin = User::factory()->role(Role::Admin)->create();
+        $response = $this->actingAs($admin)->postJson('/api/admin/articles', $this->data());
         $response->assertCreated()->assertJsonPath('data.status', 'Published');
         $id = $response->json('data.id');
 
-        $this->actingAs($technician)->getJson('/api/admin/articles?category=printer&status=Published')
+        $this->actingAs($admin)->getJson('/api/admin/articles?category=printer&status=Published')
             ->assertOk()->assertJsonCount(1, 'data');
-        $this->actingAs($technician)->patchJson('/api/admin/articles/'.$id, ['status' => 'Draft'])
+        $this->actingAs($admin)->patchJson('/api/admin/articles/'.$id, ['status' => 'Draft'])
             ->assertOk()->assertJsonPath('data.status', 'Draft');
-        $this->actingAs($technician)->deleteJson('/api/admin/articles/'.$id)->assertUnprocessable();
-        $this->actingAs($technician)->deleteJson('/api/admin/articles/'.$id.'?confirm=1')->assertOk();
+        $this->actingAs($admin)->deleteJson('/api/admin/articles/'.$id)
+            ->assertUnprocessable()
+            ->assertJson(['error_code' => 'CONFIRMATION_REQUIRED']);
+        $this->actingAs($admin)->deleteJson('/api/admin/articles/'.$id.'?confirm=1')->assertOk();
         $this->assertDatabaseMissing('knowledge_base_articles', ['id' => $id]);
     }
 }

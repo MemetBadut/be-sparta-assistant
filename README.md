@@ -50,7 +50,7 @@ POST /api/auth/logout
 GET  /api/profile
 ```
 
-Public registration always creates an employee. Admin/technician accounts are seeded or created by authorized administrators.
+Public registration always creates an employee. Admin accounts are seeded or created by authorized administrators.
 
 ## Main routes
 

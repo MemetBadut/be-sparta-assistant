@@ -50,7 +50,9 @@ class AuthTest extends TestCase
     {
         User::factory()->create(['email' => 'login@example.com', 'password' => 'password123']);
 
-        $this->postJson('/api/auth/login', ['email' => 'login@example.com', 'password' => 'wrong'])->assertUnprocessable();
+        $this->postJson('/api/auth/login', ['email' => 'login@example.com', 'password' => 'wrong'])
+            ->assertUnprocessable()
+            ->assertJson(['error_code' => 'INVALID_CREDENTIALS']);
     }
 
     public function test_profile_requires_authentication_and_returns_safe_fields(): void

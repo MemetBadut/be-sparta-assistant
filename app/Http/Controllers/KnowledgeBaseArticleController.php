@@ -49,7 +49,10 @@ class KnowledgeBaseArticleController extends Controller
 
     public function destroy(Request $request, KnowledgeBaseArticle $article)
     {
-        abort_unless($request->boolean('confirm'), 422, 'Deletion requires confirmation.');
+        abort_unless($request->boolean('confirm'), response()->json([
+            'message' => 'Deletion requires confirmation.',
+            'error_code' => 'CONFIRMATION_REQUIRED',
+        ], 422));
 
         $article->delete();
 

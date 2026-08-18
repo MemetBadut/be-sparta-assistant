@@ -48,7 +48,10 @@ class AdminTicketController extends Controller
         try {
             return new TicketResource($activities->update($ticket, $request->user(), $request->validated()));
         } catch (InvalidArgumentException $exception) {
-            abort(422, $exception->getMessage());
+            abort(response()->json([
+                'message' => $exception->getMessage(),
+                'error_code' => 'INVALID_STATUS_TRANSITION',
+            ], 422));
         }
     }
 
