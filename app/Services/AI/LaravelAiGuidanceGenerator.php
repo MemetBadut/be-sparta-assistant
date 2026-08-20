@@ -11,14 +11,16 @@ class LaravelAiGuidanceGenerator implements AiGuidanceGenerator
     {
         try {
             $provider = config('ai.default');
-            $model = config("ai.providers.{$provider}.model") ?? env('LOCAL_AI_MODEL');
+            $model = config("ai.providers.{$provider}.models.text.default")
+                ?? config("ai.providers.{$provider}.model")
+                ?? env('LOCAL_AI_MODEL');
 
             if (! $model || ! config("ai.providers.{$provider}.key")) {
                 return $this->fallback();
             }
 
             $prompt = $this->prompt($category, $description, $context);
-            $response = agent(instructions: 'You provide concise, safe IT helpdesk general guidance.')->prompt($prompt, provider: $provider, model: $model);
+            $response = (new HelpdeskGuidanceAgent)->prompt($prompt, provider: $provider, model: $model);
             $text = trim((string) $response->text);
 
             return $text === '' ? $this->fallback() : [
@@ -27,7 +29,7 @@ class LaravelAiGuidanceGenerator implements AiGuidanceGenerator
                 'recommend_ticket' => true,
             ];
         } catch (Throwable $exception) {
-            Log::warning('AI guidance unavailable', ['exception' => $exception::class]);
+            Log::warning('AI guidance unavailable', ['exception' => $exception::class, 'message' => $exception->getMessage(), 'at' => $exception->getFile().':'.$exception->getLine()]);
 
             return $this->fallback();
         }
