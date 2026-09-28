@@ -33,4 +33,17 @@ class AttachmentController extends Controller
 
         return (new TicketAttachmentResource($attachment))->response()->setStatusCode(201);
     }
+
+    public function download(Request $request, string $ticketNumber, int $attachment): mixed
+    {
+        $ticket = Ticket::where('ticket_number', $ticketNumber)->firstOrFail();
+        abort_unless($request->user()->canManage() || $ticket->user_id === $request->user()->id, 404);
+        $file = $ticket->attachments()->whereKey($attachment)->firstOrFail();
+
+        abort_unless(Storage::disk($file->disk)->exists($file->path), 404);
+
+        return Storage::disk($file->disk)->download($file->path, $file->original_name, [
+            'Content-Type' => $file->mime_type,
+        ]);
+    }
 }

@@ -34,6 +34,7 @@ Route::middleware('auth:sanctum')->group(function (): void {
     Route::post('tickets', [TicketController::class, 'store']);
     Route::get('tickets/{ticketNumber}', [TicketController::class, 'show']);
     Route::post('tickets/{ticketNumber}/attachments', [AttachmentController::class, 'store'])->middleware('throttle:uploads');
+    Route::get('tickets/{ticketNumber}/attachments/{attachment}', [AttachmentController::class, 'download']);
 
     Route::prefix('admin')->middleware('can.manage')->group(function (): void {
         Route::get('dashboard', AdminDashboardController::class);
