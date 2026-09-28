@@ -96,7 +96,7 @@ session is required:
 php composer.phar install
 cp .env.example .env && php artisan key:generate
 php artisan migrate --seed
-php artisan test          # 34 passing
+php artisan test          # 40 passing
 php artisan serve
 ```
 
