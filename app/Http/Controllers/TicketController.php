@@ -2,20 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\TicketStatus;
 use App\Http\Requests\Ticket\CreateTicketRequest;
 use App\Http\Resources\TicketResource;
 use App\Models\TroubleshootingResult;
 use App\Services\Tickets\TicketNumberGenerator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Validation\Rule;
 
 class TicketController extends Controller
 {
     public function index(Request $request): AnonymousResourceCollection
     {
-        return TicketResource::collection(
-            $request->user()->tickets()->latest('id')->with('attachments')->paginate(config('pagination.per_page')),
-        );
+        $request->validate([
+            'status' => ['sometimes', 'string', Rule::in(array_map(static fn (TicketStatus $s): string => $s->value, TicketStatus::cases()))],
+        ]);
+
+        $query = $request->user()->tickets()->latest('id')->with('attachments');
+        if ($request->filled('status')) {
+            $query->where('status', $request->string('status')->toString());
+        }
+
+        return TicketResource::collection($query->paginate(config('pagination.per_page')));
     }
 
     public function store(CreateTicketRequest $request, TicketNumberGenerator $numbers)

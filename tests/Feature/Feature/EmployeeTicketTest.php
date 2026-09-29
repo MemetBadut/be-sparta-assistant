@@ -74,4 +74,23 @@ class EmployeeTicketTest extends TestCase
         $this->actingAs($user)->getJson('/api/tickets/'.$own->ticket_number)->assertOk();
         $this->actingAs($user)->getJson('/api/tickets/'.$foreign->ticket_number)->assertNotFound();
     }
+
+    #[Test]
+    public function employee_can_filter_own_tickets_by_status(): void
+    {
+        $user = User::factory()->create();
+        $user->tickets()->create([
+            'ticket_number' => 'IT-2026-20001', 'name' => $user->name, 'division' => $user->division,
+            'issue_title' => 'Open one', 'description' => 'x', 'category' => 'windows', 'priority' => 'Low', 'status' => 'Open',
+        ]);
+        $user->tickets()->create([
+            'ticket_number' => 'IT-2026-20002', 'name' => $user->name, 'division' => $user->division,
+            'issue_title' => 'Resolved one', 'description' => 'x', 'category' => 'windows', 'priority' => 'Low', 'status' => 'Resolved',
+        ]);
+
+        $this->actingAs($user)->getJson('/api/tickets?status=Open')
+            ->assertOk()->assertJsonCount(1, 'data')->assertJsonPath('data.0.status', 'Open');
+        $this->actingAs($user)->getJson('/api/tickets?status=Bogus')
+            ->assertUnprocessable()->assertJsonValidationErrors(['status']);
+    }
 }
