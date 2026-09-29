@@ -39,7 +39,7 @@ class LaravelAiGuidanceGenerator implements AiGuidanceGenerator
     {
         $contextJson = json_encode($context, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
-        return "Category: {$category}\nIssue: {$description}\nVerified context (reference only): {$contextJson}\n\nGive cautious, generic troubleshooting guidance. Do not claim company policy, do not invent internal procedures, and recommend creating an IT ticket. Return plain text only.";
+        return "Category: {$category}\nIssue: {$description}\nVerified context (reference only): {$contextJson}\n\nGive cautious, generic troubleshooting guidance. Do not claim company policy, do not invent internal procedures, and recommend creating an IT ticket. Always respond in the same language as the issue description. If the description mixes languages or is ambiguous, respond in Indonesian. Use Indonesian or English only. Return plain text only.";
     }
 
     /** @return array{guidance:?string,steps:list<string>,recommend_ticket:bool} */

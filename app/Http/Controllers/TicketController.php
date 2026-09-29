@@ -9,6 +9,7 @@ use App\Models\TroubleshootingResult;
 use App\Services\Tickets\TicketNumberGenerator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class TicketController extends Controller
@@ -25,6 +26,17 @@ class TicketController extends Controller
         }
 
         return TicketResource::collection($query->paginate(config('pagination.per_page')));
+    }
+
+    public function downloadIsoTemplate()
+    {
+        abort_unless(Storage::disk('public')->exists('templates/iso-repair-template.xlsx'), 404);
+
+        return Storage::disk('public')->download(
+            'templates/iso-repair-template.xlsx',
+            'iso-repair-template.xlsx',
+            ['Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
+        );
     }
 
     public function store(CreateTicketRequest $request, TicketNumberGenerator $numbers)

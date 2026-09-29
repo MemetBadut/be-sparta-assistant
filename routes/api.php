@@ -32,6 +32,7 @@ Route::middleware('auth:sanctum')->group(function (): void {
     Route::post('troubleshooting/{troubleshooting}/feedback', [TroubleshootingController::class, 'feedback']);
     Route::get('tickets', [TicketController::class, 'index']);
     Route::post('tickets', [TicketController::class, 'store']);
+    Route::get('tickets/iso-template', [TicketController::class, 'downloadIsoTemplate']);
     Route::get('tickets/{ticketNumber}', [TicketController::class, 'show']);
     Route::post('tickets/{ticketNumber}/attachments', [AttachmentController::class, 'store'])->middleware('throttle:uploads');
     Route::get('tickets/{ticketNumber}/attachments/{attachment}', [AttachmentController::class, 'download']);
