@@ -32,7 +32,7 @@ class TroubleshootingService
             $payload['article'] = [
                 'id' => $article->id,
                 'title' => $article->title,
-                'steps' => $article->steps ?: ["Follow the verified solution for \"{$article->title}\". Expected result: {$article->expected_result}"],
+                'steps' => $article->steps ?: ['Detailed steps are unavailable. Please create an IT ticket for guided help.'],
                 'expected_result' => $article->expected_result,
             ];
             // A published article matched, so this is a verified result regardless of AI availability.

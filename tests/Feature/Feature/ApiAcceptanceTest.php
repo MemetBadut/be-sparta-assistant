@@ -56,14 +56,19 @@ class ApiAcceptanceTest extends TestCase
             'file' => UploadedFile::fake()->image('screenshot.png'),
         ], ['Accept' => 'application/json'])->assertCreated();
 
-        // Admin updates ticket.
-        $admin = User::factory()->role(Role::Admin)->create();
-        $this->actingAs($admin)->patchJson("/api/admin/tickets/{$ticketNumber}", ['status' => 'In Progress'])
+        // Admin logs in and updates ticket.
+        $admin = User::factory()->role(Role::Admin)->create(['password' => 'password123']);
+        $this->postJson('/api/auth/logout')->assertOk();
+        $this->app['auth']->forgetGuards(); // test app reuses one guard across requests; real requests get a fresh one
+        $this->postJson('/api/auth/login', ['email' => $admin->email, 'password' => 'password123'])->assertOk();
+        $this->patchJson("/api/admin/tickets/{$ticketNumber}", ['status' => 'In Progress'])
             ->assertOk()->assertJsonPath('data.status', 'In Progress');
 
-        // Employee still reads own ticket.
-        $this->actingAs(User::where('employee_id', 'EMP-8001')->first())
-            ->getJson("/api/tickets/{$ticketNumber}")->assertOk();
+        // Employee logs back in and still reads own ticket.
+        $this->postJson('/api/auth/logout')->assertOk();
+        $this->app['auth']->forgetGuards();
+        $this->postJson('/api/auth/login', ['email' => 'acceptance@example.com', 'password' => 'password123'])->assertOk();
+        $this->getJson("/api/tickets/{$ticketNumber}")->assertOk();
 
         // Draft articles never surface.
         $draftResult = $this->postJson('/api/troubleshooting', [

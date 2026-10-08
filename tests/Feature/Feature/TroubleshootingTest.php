@@ -4,6 +4,7 @@ namespace Tests\Feature\Feature;
 
 use App\Models\KnowledgeBaseArticle;
 use App\Models\User;
+use App\Services\AI\AiGuidanceGenerator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -11,6 +12,24 @@ use Tests\TestCase;
 class TroubleshootingTest extends TestCase
 {
     use RefreshDatabase;
+
+    #[Test]
+    public function uses_support_fallback_when_verified_steps_are_unavailable(): void
+    {
+        KnowledgeBaseArticle::factory()->create(['steps' => []]);
+
+        $this->mock(AiGuidanceGenerator::class, function ($mock): void {
+            $mock->shouldReceive('generate')->never();
+        });
+
+        $response = $this->actingAs(User::factory()->create())->postJson('/api/troubleshooting', [
+            'category' => 'wifi_network',
+            'description' => 'Wi-Fi is connected but there is no internet',
+        ]);
+
+        $response->assertCreated()
+            ->assertJsonPath('data.article.steps.0', 'Detailed steps are unavailable. Please create an IT ticket for guided help.');
+    }
 
     #[Test]
     public function returns_verified_article_steps_and_persists_result(): void
