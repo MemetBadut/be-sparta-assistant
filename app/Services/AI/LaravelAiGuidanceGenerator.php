@@ -29,7 +29,10 @@ class LaravelAiGuidanceGenerator implements AiGuidanceGenerator
                 'recommend_ticket' => true,
             ];
         } catch (Throwable $exception) {
-            Log::warning('AI guidance unavailable', ['exception' => $exception::class, 'message' => $exception->getMessage(), 'at' => $exception->getFile().':'.$exception->getLine()]);
+            Log::warning('AI guidance unavailable', [
+                'provider' => config('ai.default'),
+                'exception' => $exception::class,
+            ]);
 
             return $this->fallback();
         }

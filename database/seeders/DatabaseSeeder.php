@@ -34,6 +34,50 @@ class DatabaseSeeder extends Seeder
             'updated_by' => $admin->id,
         ]);
 
+        KnowledgeBaseArticle::factory()->create([
+            'title' => 'Windows update restart issue',
+            'category' => Category::Windows,
+            'symptoms' => 'Windows restarts unexpectedly after a system update.',
+            'keywords' => 'windows, system, update, restart, boot',
+            'problem_description' => 'The computer does not complete a Windows update normally.',
+            'steps' => ['Save your work.', 'Restart the computer once.', 'Contact IT if Windows still cannot boot.'],
+            'expected_result' => 'Windows starts normally after the update.',
+            'updated_by' => $admin->id,
+        ]);
+
+        KnowledgeBaseArticle::factory()->create([
+            'title' => 'Laptop keyboard not responding',
+            'category' => Category::Computer,
+            'symptoms' => 'Laptop keyboard keys do not respond.',
+            'keywords' => 'laptop, keyboard, hardware, keys',
+            'problem_description' => 'The built-in keyboard does not accept input.',
+            'steps' => ['Reconnect any external keyboard.', 'Restart the laptop.', 'Contact IT if the keyboard remains unresponsive.'],
+            'expected_result' => 'Keyboard input works normally.',
+            'updated_by' => $admin->id,
+        ]);
+
+        KnowledgeBaseArticle::factory()->create([
+            'title' => 'Printer queue stuck',
+            'category' => Category::Printer,
+            'symptoms' => 'Print jobs remain queued.',
+            'keywords' => 'printer, print, queue, paper',
+            'problem_description' => 'The printer does not process queued documents.',
+            'steps' => ['Cancel the stuck print job.', 'Check that paper is loaded.', 'Restart the printer.'],
+            'expected_result' => 'The document prints successfully.',
+            'updated_by' => $admin->id,
+        ]);
+
+        KnowledgeBaseArticle::factory()->create([
+            'title' => 'Office application stops responding',
+            'category' => Category::Software,
+            'symptoms' => 'An Office application stops responding.',
+            'keywords' => 'office, application, software, crash, program',
+            'problem_description' => 'A desktop application closes or stops responding during use.',
+            'steps' => ['Save work in other applications.', 'Close and reopen the application.', 'Contact IT if the issue repeats.'],
+            'expected_result' => 'The application opens and responds normally.',
+            'updated_by' => $admin->id,
+        ]);
+
         KnowledgeBaseArticle::factory()->draft()->create([
             'title' => 'Unpublished printer troubleshooting draft',
             'category' => Category::Printer,

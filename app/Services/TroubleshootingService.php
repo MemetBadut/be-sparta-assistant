@@ -29,18 +29,10 @@ class TroubleshootingService
         ];
 
         if ($article) {
-            $guidance = $this->ai->generate($category, $description, [
-                'title' => $article->title,
-                'symptoms' => $article->symptoms,
-                'keywords' => $article->keywords,
-                'problem_description' => $article->problem_description,
-                'expected_result' => $article->expected_result,
-            ]);
-            $steps = $guidance['steps'] ?? [];
             $payload['article'] = [
                 'id' => $article->id,
                 'title' => $article->title,
-                'steps' => $steps !== [] ? $steps : ["Follow the verified solution for \"{$article->title}\". Expected result: {$article->expected_result}"],
+                'steps' => $article->steps ?: ["Follow the verified solution for \"{$article->title}\". Expected result: {$article->expected_result}"],
                 'expected_result' => $article->expected_result,
             ];
             // A published article matched, so this is a verified result regardless of AI availability.

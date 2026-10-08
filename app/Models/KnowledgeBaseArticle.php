@@ -15,7 +15,7 @@ class KnowledgeBaseArticle extends Model
 
     protected $fillable = [
         'title', 'category', 'symptoms', 'keywords', 'problem_description',
-        'expected_result', 'status', 'updated_by',
+        'expected_result', 'steps', 'status', 'updated_by',
     ];
 
     protected function casts(): array
@@ -23,6 +23,7 @@ class KnowledgeBaseArticle extends Model
         return [
             'category' => Category::class,
             'status' => ArticleStatus::class,
+            'steps' => 'array',
         ];
     }
 

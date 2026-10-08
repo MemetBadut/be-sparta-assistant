@@ -13,7 +13,7 @@ class CreateTroubleshootingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'category' => ['required', 'string', Rule::in(Category::values())],
+            'category' => ['sometimes', 'nullable', 'string', Rule::in(Category::values())],
             'description' => ['required', 'string', 'min:3', 'max:5000'],
         ];
     }

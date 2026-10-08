@@ -18,6 +18,7 @@ class KnowledgeBaseArticleFactory extends Factory
             'symptoms' => 'Wi-Fi shows connected but websites cannot be accessed.',
             'keywords' => 'wifi, internet, connected, no internet, network',
             'problem_description' => 'The device associates with the company Wi-Fi but has no working internet access.',
+            'steps' => ['Reconnect to Wi-Fi.', 'Open a website to verify access.'],
             'expected_result' => 'Internet access is restored.',
             'status' => ArticleStatus::Published,
         ];

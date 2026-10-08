@@ -16,6 +16,7 @@ class KnowledgeBaseArticleResource extends JsonResource
             'symptoms' => $this->symptoms,
             'keywords' => $this->keywords,
             'problem_description' => $this->problem_description,
+            'steps' => $this->steps ?? [],
             'expected_result' => $this->expected_result,
             'status' => $this->status->value,
             'updated_by' => $this->updated_by,
