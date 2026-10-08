@@ -18,7 +18,7 @@ RateLimiter::for('auth', fn (Request $request) => Limit::perMinute(10)->by($requ
 RateLimiter::for('troubleshooting', fn (Request $request) => Limit::perMinute(30)->by($request->user()?->id ?? $request->ip()));
 RateLimiter::for('uploads', fn (Request $request) => Limit::perMinute(10)->by($request->user()?->id ?? $request->ip()));
 
-Route::middleware(['web', 'throttle:auth'])->prefix('auth')->group(function (): void {
+Route::middleware(['throttle:auth'])->prefix('auth')->group(function (): void {
     Route::post('register', [AuthController::class, 'register']);
     Route::post('login', [AuthController::class, 'login']);
     Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
@@ -26,9 +26,10 @@ Route::middleware(['web', 'throttle:auth'])->prefix('auth')->group(function (): 
 
 Route::get('categories', CategoryController::class);
 
-Route::middleware('auth:sanctum')->group(function (): void {
+Route::middleware(['auth:sanctum'])->group(function (): void {
     Route::get('profile', ProfileController::class);
     Route::post('troubleshooting', [TroubleshootingController::class, 'store'])->middleware('throttle:troubleshooting');
+    Route::get('troubleshooting/{troubleshooting}', [TroubleshootingController::class, 'show']);
     Route::post('troubleshooting/{troubleshooting}/feedback', [TroubleshootingController::class, 'feedback']);
     Route::get('tickets', [TicketController::class, 'index']);
     Route::post('tickets', [TicketController::class, 'store']);
